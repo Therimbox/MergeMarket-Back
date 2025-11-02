@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mergemarket-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: mergemarket
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: mergemarket
+      MYSQL_PASSWORD: mergemarketpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build: .
+    container_name: mergemarket-backend
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mergemarket?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: mergemarket
+      SPRING_DATASOURCE_PASSWORD: mergemarketpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    restart: always
+
+  frontend:
+    build:
+      context: ./webcontent
+    container_name: mergemarket-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  db_data:
