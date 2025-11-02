@@ -8,10 +8,8 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-RUN echo "=== CHROME VERSION ===" && google-chrome --version && echo "====================="
-
 # Copia el código fuente y construye el JAR
-COPY . . 
+COPY . .
 RUN mvn clean package -DskipTests
 
 # Imagen final
@@ -26,7 +24,7 @@ RUN apt-get update && \
     apt-get install -y google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
-RUN google-chrome --version
+RUN echo "=== CHROME VERSION ===" && google-chrome --version && echo "====================="
 
 WORKDIR /app
 COPY --from=builder /app/target/MergeMarket-0.0.1-SNAPSHOT.jar app.jar
