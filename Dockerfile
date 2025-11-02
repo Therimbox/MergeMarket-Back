@@ -8,6 +8,8 @@ RUN apt-get update && \
 
 WORKDIR /app
 
+RUN echo "=== CHROME VERSION ===" && google-chrome --version && echo "====================="
+
 # Copia el código fuente y construye el JAR
 COPY . . 
 RUN mvn clean package -DskipTests
