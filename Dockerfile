@@ -9,7 +9,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copia el código fuente y construye el JAR
-COPY . .
+COPY . . 
 RUN mvn clean package -DskipTests
 
 # Imagen final
@@ -25,12 +25,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN google-chrome --version
-
-# Instala ChromeDriver versión 119 (compatible con Chrome 119)
-RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/119.0.6045.105/chromedriver_linux64.zip && \
-    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
-    rm /tmp/chromedriver.zip && \
-    chmod +x /usr/local/bin/chromedriver
 
 WORKDIR /app
 COPY --from=builder /app/target/MergeMarket-0.0.1-SNAPSHOT.jar app.jar
