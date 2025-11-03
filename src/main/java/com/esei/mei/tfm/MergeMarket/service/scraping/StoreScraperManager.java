@@ -65,8 +65,8 @@ public class StoreScraperManager {
     public List<Product> scrapeProducts(String baseUrl, ProductCategory category) {
         List<Product> products = new ArrayList<>();
 
-    	StoreScraper scraper = this.findScraperForURL(baseUrl);
-    	if (scraper != null) {
+        StoreScraper scraper = this.findScraperForURL(baseUrl);
+        if (scraper != null) {
             List<String> names = new ArrayList<>();
             List<String> urls = new ArrayList<>();
             List<String> images = new ArrayList<>();
@@ -75,14 +75,17 @@ public class StoreScraperManager {
             boolean foundProducts = true;
 
             while (foundProducts) {
-            	String url = scraper.buildPageURL(baseUrl, pageNumber);
+                String url = scraper.buildPageURL(baseUrl, pageNumber);
+                System.out.println("Scraping URL: " + url);
                 try {
                     String html;
-                    List<Product> pageProducts= new ArrayList<>();
+                    List<Product> pageProducts = new ArrayList<>();
                     html = this.getHtmlSelenium(url);
+                    System.out.println("HTML content length: " + (html != null ? html.length() : 0));
                     Document document = Jsoup.parse(html);
 
                     pageProducts = scraper.extractPageProducts(document, names, baseUrl, pageNumber, urls, images, category);
+                    System.out.println("Products found on page " + pageNumber + ": " + pageProducts.size());
                     if (pageProducts.isEmpty()) {
                         foundProducts = false;
                     } else {
@@ -90,12 +93,16 @@ public class StoreScraperManager {
                         pageNumber++;
                     }
                 } catch (IOException e) {
+                    System.err.println("Error scraping URL: " + url);
                     e.printStackTrace();
                 }
-            }    		
-    	}
-    	
-    	return products;   	
+            }
+        } else {
+            System.err.println("No scraper found for base URL: " + baseUrl);
+        }
+
+        System.out.println("Total products scraped: " + products.size());
+        return products;
     }
 
     
