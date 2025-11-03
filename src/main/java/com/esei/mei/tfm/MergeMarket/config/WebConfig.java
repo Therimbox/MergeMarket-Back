@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Permitir todas las rutas
-                .allowedOrigins("http://84.246.213.41:8081") // Dominio del frontend en producción
+                .allowedOriginPatterns("http://84.246.213.41:8081") // Dominio del frontend en producción
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
                 .allowedHeaders("*") // Permitir todos los headers
                 .allowCredentials(true); // Permitir credenciales (si es necesario)
