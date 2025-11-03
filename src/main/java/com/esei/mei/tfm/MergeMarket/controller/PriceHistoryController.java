@@ -16,7 +16,7 @@ import com.esei.mei.tfm.MergeMarket.service.PriceHistoryService;
 
 @RestController
 @RequestMapping("/api/priceHistory")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://84.246.213.41:8081")
 public class PriceHistoryController {
 	
 	@Autowired

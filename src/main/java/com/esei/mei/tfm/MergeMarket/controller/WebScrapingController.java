@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/webscraping")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://84.246.213.41:8081")
 public class WebScrapingController {
 
     private final WebScrapingService webScrapingService;

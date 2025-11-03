@@ -12,7 +12,7 @@ import com.esei.mei.tfm.MergeMarket.service.ProductCategoryService;
 
 @RestController
 @RequestMapping("/api/productcategories")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://84.246.213.41:8081")
 public class ProductCategoryController {
 
     @Autowired
