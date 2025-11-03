@@ -38,7 +38,7 @@ public class StoreScraperManager {
 	
 	
 	private void initWebDriver() {
-    	System.setProperty("webdriver.chrome.driver", "drivers\\chromedriver.exe");
+    	System.setProperty("webdriver.chrome.driver", "/app/drivers/chromedriver"); // Correct path for Linux
 	}
 	
 	private void registerScrappers() {
@@ -95,6 +95,7 @@ public class StoreScraperManager {
 
     
 	private  String getHtmlSelenium(String url) throws IOException {
+        System.setProperty("webdriver.chrome.driver", "/app/drivers/chromedriver"); // Correct path for Linux
         String itemList = null;
         String html = null;
         Integer test = 0;

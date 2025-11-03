@@ -33,6 +33,9 @@ RUN wget -O /tmp/chromedriver.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrom
     rm -rf /usr/local/bin/chromedriver-linux64 /tmp/chromedriver.zip && \
     chmod +x /usr/local/bin/chromedriver
 
+# Copy chromedriver to the expected path
+RUN mkdir -p /app/drivers && cp /usr/local/bin/chromedriver /app/drivers/chromedriver.exe
+
 WORKDIR /app
 COPY --from=builder /app/target/MergeMarket-0.0.1-SNAPSHOT.jar app.jar
 
