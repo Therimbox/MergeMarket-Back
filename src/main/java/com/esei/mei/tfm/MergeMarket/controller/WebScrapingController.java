@@ -25,9 +25,11 @@ public class WebScrapingController {
     @PostMapping("/scrape")
     public ResponseEntity<List<Product>> scrapeAndSaveProducts(@RequestParam String baseUrl, @RequestBody ProductCategory category) {
         try {
+            System.out.println("Iniciando proceso de web scraping para la categoría: " + category.getName());
             List<Product> products = webScrapingService.scrapeAndSaveProducts(baseUrl, category);
             return new ResponseEntity<>(products, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace(); // Log the error to the console/logs
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
