@@ -26,6 +26,13 @@ RUN apt-get update && \
 
 RUN echo "=== CHROME VERSION ===" && google-chrome --version && echo "====================="
 
+# Instala ChromeDriver versión 142 (compatible con Chrome 142)
+RUN wget -O /tmp/chromedriver.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/142.0.7444.59/linux64/chromedriver-linux64.zip && \
+    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
+    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+    rm -rf /usr/local/bin/chromedriver-linux64 /tmp/chromedriver.zip && \
+    chmod +x /usr/local/bin/chromedriver
+
 WORKDIR /app
 COPY --from=builder /app/target/MergeMarket-0.0.1-SNAPSHOT.jar app.jar
 
