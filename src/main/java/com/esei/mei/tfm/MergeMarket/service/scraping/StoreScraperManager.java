@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LoggingPreferences;
 
 import javax.annotation.PostConstruct;
 
@@ -15,6 +17,9 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.remote.CapabilityType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +105,16 @@ public class StoreScraperManager {
         String html = null;
         Integer test = 0;
         Integer timeWait = 500;
-        WebDriver driver = new ChromeDriver();		
+        LoggingPreferences logPrefs = new LoggingPreferences();
+        logPrefs.enable(LogType.BROWSER, Level.ALL);
+        ChromeOptions options = new ChromeOptions();
+        options.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+        options.addArguments("--headless"); // Ejecutar en modo sin cabeza
+        options.addArguments("--no-sandbox"); // Deshabilitar sandbox
+        options.addArguments("--disable-dev-shm-usage"); // Evitar problemas de memoria compartida
+        options.addArguments("--disable-gpu"); // Deshabilitar GPU
+        options.addArguments("--window-size=1920,1080"); // Tamaño de ventana predeterminado
+        WebDriver driver = new ChromeDriver(options);		
 
         driver.get(url);
         if(url.contains(WebScrapingConstants.AMAZON)) {
