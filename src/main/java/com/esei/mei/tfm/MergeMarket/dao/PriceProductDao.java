@@ -18,7 +18,7 @@ public interface PriceProductDao extends JpaRepository<PriceProduct, Long> {
 
     List<PriceProduct> findByProductIsNull();
 
-    @Query(value = "SELECT * FROM priceproduct pp WHERE pp.\"product_idProduct\" = :productId ORDER BY pp.price ASC", nativeQuery = true)
+    @Query(value = "SELECT * FROM priceproduct pp WHERE pp.\"product_idproduct\" = :productId ORDER BY pp.price ASC", nativeQuery = true)
     List<PriceProduct> findByProductOrderByPriceAsc(@Param("productId") Long productId);
 
     @Query("SELECT pp FROM PriceProduct pp WHERE pp.product = :product AND pp.url = :url")
