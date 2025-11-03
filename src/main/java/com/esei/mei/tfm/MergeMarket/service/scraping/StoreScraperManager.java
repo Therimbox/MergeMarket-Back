@@ -1,6 +1,10 @@
 package com.esei.mei.tfm.MergeMarket.service.scraping;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +110,7 @@ public class StoreScraperManager {
     }
 
     
-	private  String getHtmlSelenium(String url) throws IOException {
+	private String getHtmlSelenium(String url) throws IOException {
         System.setProperty("webdriver.chrome.driver", "/app/drivers/chromedriver"); // Correct path for Linux
         String itemList = null;
         String html = null;
@@ -121,40 +125,38 @@ public class StoreScraperManager {
         options.addArguments("--disable-dev-shm-usage"); // Evitar problemas de memoria compartida
         options.addArguments("--disable-gpu"); // Deshabilitar GPU
         options.addArguments("--window-size=1920,1080"); // Tamaño de ventana predeterminado
-        WebDriver driver = new ChromeDriver(options);		
+        WebDriver driver = new ChromeDriver(options);
 
         driver.get(url);
-        if(url.contains(WebScrapingConstants.AMAZON)) {
-        	JavascriptExecutor js = (JavascriptExecutor) driver;
-        	js.executeScript("var scrollStep = window.innerHeight / 20;" +
+        if (url.contains(WebScrapingConstants.AMAZON)) {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("var scrollStep = window.innerHeight / 20;" +
                     "function scrollToBottom() {" +
                     "    if (window.scrollY < document.body.scrollHeight - window.innerHeight) {" +
                     "        window.scrollBy(0, scrollStep);" +
                     "        setTimeout(scrollToBottom, 30);" +
                     "    }" +
                     "} scrollToBottom();");
-        	timeWait = 4000;
+            timeWait = 4000;
         }
-        while(itemList == null && test < 3) {
-        	try {
+        while (itemList == null && test < 3) {
+            try {
                 Thread.sleep(timeWait);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        	html = driver.getPageSource();
-            Document document = Jsoup.parse(html);
-            Elements scripts = document.select("script");
-            for (Element script : scripts) {
-                if (script.attr("type").equals("application/ld+json") && script.data().contains("\"@type\":\"ItemList\"")) {
-                    itemList = script.data();
-                    break;
-                }
-            }
-            if(itemList == null) {
-            	test++;
-            }
+            html = driver.getPageSource();
+
+            // Save the HTML content to a file for debugging
+            String sanitizedUrl = url.replaceAll("[\\/:*?\"<>|]", "_");
+            Path outputPath = Paths.get("/home/extracciones", sanitizedUrl + ".html");
+            Files.createDirectories(outputPath.getParent());
+            Files.write(outputPath, html.getBytes(StandardCharsets.UTF_8));
+
+            itemList = html;
+            test++;
         }
-        driver.quit();    
-        return html;        
+        driver.quit();
+        return html;
     }
 }

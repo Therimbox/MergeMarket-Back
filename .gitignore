@@ -17,3 +17,5 @@ Thumbs.db
 chromedriver.exe
 # Otros
 *.swp
+src/main/resources/application.properties
+docker-compose.yml
