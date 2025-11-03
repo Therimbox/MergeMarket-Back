@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -18,6 +19,7 @@ public class ProductTracking {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
