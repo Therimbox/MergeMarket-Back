@@ -9,15 +9,15 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copia el código fuente y construye el JAR
-COPY . .
+COPY . . 
 RUN mvn clean package -DskipTests
 
 # Imagen final
 FROM openjdk:17-jdk-slim
 
-# Instala Google Chrome
+# Instala Google Chrome y unzip
 RUN apt-get update && \
-    apt-get install -y wget gnupg2 && \
+    apt-get install -y wget gnupg2 unzip && \
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
