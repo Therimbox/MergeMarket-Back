@@ -115,7 +115,7 @@ public class StoreScraperManager {
         String itemList = null;
         String html = null;
         Integer test = 0;
-        Integer timeWait = 500;
+        Integer timeWait = 1000; // Increased wait time to simulate human behavior
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.ALL);
         ChromeOptions options = new ChromeOptions();
@@ -125,6 +125,7 @@ public class StoreScraperManager {
         options.addArguments("--disable-dev-shm-usage"); // Evitar problemas de memoria compartida
         options.addArguments("--disable-gpu"); // Deshabilitar GPU
         options.addArguments("--window-size=1920,1080"); // Tamaño de ventana predeterminado
+        options.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"); // Realistic User-Agent
         WebDriver driver = new ChromeDriver(options);
 
         driver.get(url);
@@ -141,6 +142,7 @@ public class StoreScraperManager {
                     "} scrollToBottom();");
             timeWait = 4000;
         }
+
         while (itemList == null && test < 3) {
             try {
                 Thread.sleep(timeWait);
@@ -148,6 +150,18 @@ public class StoreScraperManager {
                 e.printStackTrace();
             }
             html = driver.getPageSource();
+
+            // Check for captcha and refresh the page if detected
+            if (html.contains("Verifying you are human")) {
+                System.out.println("Captcha detected. Refreshing the page...");
+                driver.navigate().refresh();
+                try {
+                    Thread.sleep(5000); // Wait for the page to reload
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                continue;
+            }
 
             // Log the HTML content
             System.out.println("HTML content retrieved (attempt " + (test + 1) + "):\n" + html);
