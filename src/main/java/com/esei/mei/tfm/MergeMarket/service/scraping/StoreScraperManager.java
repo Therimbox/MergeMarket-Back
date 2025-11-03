@@ -128,6 +128,8 @@ public class StoreScraperManager {
         WebDriver driver = new ChromeDriver(options);
 
         driver.get(url);
+        System.out.println("Navigated to URL: " + url);
+
         if (url.contains(WebScrapingConstants.AMAZON)) {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("var scrollStep = window.innerHeight / 20;" +
@@ -147,11 +149,19 @@ public class StoreScraperManager {
             }
             html = driver.getPageSource();
 
+            // Log the HTML content
+            System.out.println("HTML content retrieved (attempt " + (test + 1) + "):\n" + html);
+
             // Save the HTML content to a file for debugging
-            String sanitizedUrl = url.replaceAll("[\\/:*?\"<>|]", "_");
-            Path outputPath = Paths.get("/home/extracciones", sanitizedUrl + ".html");
-            Files.createDirectories(outputPath.getParent());
-            Files.write(outputPath, html.getBytes(StandardCharsets.UTF_8));
+            try {
+                String sanitizedUrl = url.replaceAll("[\\/:*?\"<>|]", "_");
+                Path outputPath = Paths.get("/home/extracciones", sanitizedUrl + ".html");
+                Files.createDirectories(outputPath.getParent());
+                Files.write(outputPath, html.getBytes(StandardCharsets.UTF_8));
+                System.out.println("HTML content saved to: " + outputPath);
+            } catch (IOException e) {
+                System.err.println("Failed to save HTML content: " + e.getMessage());
+            }
 
             itemList = html;
             test++;
