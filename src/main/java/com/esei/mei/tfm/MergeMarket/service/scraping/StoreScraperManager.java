@@ -163,9 +163,6 @@ public class StoreScraperManager {
                 continue;
             }
 
-            // Log the HTML content
-            System.out.println("HTML content retrieved (attempt " + (test + 1) + "):\n" + html);
-
             // Save the HTML content to a file for debugging
             try {
                 String sanitizedUrl = url.replaceAll("[\\/:*?\"<>|]", "_");

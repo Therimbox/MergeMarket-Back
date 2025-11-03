@@ -46,10 +46,19 @@ public class AmazonScraper implements StoreScraper {
             	precioElement = div.select("span.a-color-price").first();
             }
             double precio = 0.0;
-            if(null != precioElement) {
-            	String precioText = precioElement.text();
-            	precioText = precioText.replace("€", "").replace(",", ".");
-            	precio = Double.parseDouble(precioText);
+            // Sanitize and parse the price text
+            if (null != precioElement) {
+                String precioText = precioElement.text();
+                precioText = precioText.replace("€", "").replace(",", ".");
+
+                // Ensure the text is a valid number format
+                precioText = precioText.replaceAll("[^0-9.]", "");
+                try {
+                    precio = Double.parseDouble(precioText);
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid price format: " + precioText);
+                    precio = 0.0; // Default to 0.0 if parsing fails
+                }
             }
 
             Element enlaceElement = div.select("a").first();
