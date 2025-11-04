@@ -25,13 +25,15 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences; // Correct import for Selenium
 import org.openqa.selenium.remote.CapabilityType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
 import com.esei.mei.tfm.MergeMarket.constants.WebScrapingConstants;
 import com.esei.mei.tfm.MergeMarket.entity.Product;
 import com.esei.mei.tfm.MergeMarket.entity.ProductCategory;
 
-
+@EnableScheduling
 @Service
 public class StoreScraperManager {
 
@@ -179,5 +181,37 @@ public class StoreScraperManager {
         }
         driver.quit();
         return html;
+    }
+
+    @Scheduled(cron = "0 10 2 * * ?") // Ejecutar todos los días a las 2:10 AM
+    public void scrapeCategory1() {
+        System.out.println("Iniciando scraping programado para la categoría Procesadores...");
+        scrapeProducts("https://www.pccomponentes.com/procesadores", ProductCategory.CATEGORY_1);
+        scrapeProducts("https://www.coolmod.com/componentes-pc-procesadores/", ProductCategory.CATEGORY_1);
+        scrapeProducts("https://www.amazon.es/gp/bestsellers/computers/937925031/ref=zg_bs_pg_2_computers", ProductCategory.CATEGORY_1);
+        System.out.println("Scraping programado para la categoría Procesadores completado.");
+    }
+
+    @Scheduled(cron = "0 20 3 * * ?") // Ejecutar todos los días a las 3:20 AM
+    public void scrapeCategory2() {
+        System.out.println("Iniciando scraping programado para la categoría Tarjetas Gráficas...");
+        scrapeProducts("https://www.pccomponentes.com/tarjetas-graficas", ProductCategory.CATEGORY_2);
+        scrapeProducts("https://www.coolmod.com/tarjetas-graficas/", ProductCategory.CATEGORY_2);
+        System.out.println("Scraping programado para la categoría Tarjetas Gráficas completado.");
+    }
+
+    @Scheduled(cron = "0 30 4 * * ?") // Ejecutar todos los días a las 4:30 AM
+    public void scrapeCategory3() {
+        System.out.println("Iniciando scraping programado para la categoría Placas Base...");
+        scrapeProducts("https://www.pccomponentes.com/placas-base", ProductCategory.CATEGORY_3);
+        scrapeProducts("https://www.coolmod.com/componentes-pc-placas-base/", ProductCategory.CATEGORY_3);
+        System.out.println("Scraping programado para la categoría Placas Base completado.");
+    }
+
+    @Scheduled(cron = "0 40 5 * * ?") // Ejecutar todos los días a las 5:40 AM
+    public void scrapeCategory4() {
+        System.out.println("Iniciando scraping programado para la categoría RAM...");
+        scrapeProducts("https://www.pccomponentes.com/memorias-ram", ProductCategory.CATEGORY_4);
+        System.out.println("Scraping programado para la categoría RAM completado.");
     }
 }
