@@ -108,4 +108,9 @@ public class PriceProductServiceImpl implements PriceProductService {
         }
     	priceProductDao.deleteByUrlContainingAndCategory(url, category);
 	}
+
+	@Override
+	public List<PriceProduct> findByProduct(Product product) {
+		return priceProductDao.findByProductOrderByPriceAsc(product.getIdProduct());
+	}
 }

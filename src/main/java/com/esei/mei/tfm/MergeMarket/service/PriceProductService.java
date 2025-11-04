@@ -26,4 +26,6 @@ public interface PriceProductService {
 	List<PriceProduct> findByProductAndUrlContaining(Product product, String url);
 
 	void deletePriceProducts(String baseUrl, ProductCategory category);
+
+	List<PriceProduct> findByProduct(Product product);
 }

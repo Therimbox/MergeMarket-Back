@@ -61,4 +61,27 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return toret;
     }
+
+	@Override
+	public Product findMatchingProduct(String productName, ProductCategory category) {
+		return productDao.findByCategory(category).stream()
+			.filter(product -> product.getName().equalsIgnoreCase(productName))
+			.findFirst()
+			.orElse(null);
+	}
+
+	@Override
+    public Product findByNameAndCategory(String name, ProductCategory category) {
+        return productDao.findByCategory(category).stream()
+            .filter(product -> product.getName().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
+    }
+
+	@Override
+    public ProductCategory findCategoryById(Long id) {
+        return productDao.findById(id)
+            .map(Product::getCategory)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found for the given ID"));
+    }
 }

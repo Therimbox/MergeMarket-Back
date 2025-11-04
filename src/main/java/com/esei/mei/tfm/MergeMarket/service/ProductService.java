@@ -22,4 +22,10 @@ public interface ProductService {
 
 	List<Product> findProduct(String name, ProductCategory category);
 
+	ProductCategory findCategoryById(Long id);
+
+	Product findByNameAndCategory(String name, ProductCategory category);
+
+	Product findMatchingProduct(String productName, ProductCategory category);
+
 }
