@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import com.esei.mei.tfm.MergeMarket.constants.WebScrapingConstants;
 import com.esei.mei.tfm.MergeMarket.entity.Product;
 import com.esei.mei.tfm.MergeMarket.entity.ProductCategory;
+import com.esei.mei.tfm.MergeMarket.service.ProductCategoryService;
 
 @EnableScheduling
 @Service
@@ -40,6 +41,9 @@ public class StoreScraperManager {
 	@Autowired
 	private List<StoreScraper> availableStoreScrapers;
 	private Map<String, StoreScraper> registeredStoreScrapers = new HashMap<>();
+	
+	@Autowired
+    private ProductCategoryService productCategoryService;
 	
 	@PostConstruct
 	private void initilize() {
@@ -186,32 +190,36 @@ public class StoreScraperManager {
     @Scheduled(cron = "0 10 2 * * ?") // Ejecutar todos los días a las 2:10 AM
     public void scrapeCategory1() {
         System.out.println("Iniciando scraping programado para la categoría Procesadores...");
-        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_PROCESADORES, WebScrapingConstants.CATEGORIA_PROCESADOR);
-        scrapeProducts(WebScrapingConstants.WEB_COOLMOD_PROCESADORES, WebScrapingConstants.CATEGORIA_PROCESADOR);
-        scrapeProducts(WebScrapingConstants.WEB_AMAZON_PROCESADORES, WebScrapingConstants.CATEGORIA_PROCESADOR);
+        ProductCategory category = productCategoryService.findById(WebScrapingConstants.CATEGORIA_PROCESADOR);
+        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_PROCESADORES, category);
+        scrapeProducts(WebScrapingConstants.WEB_COOLMOD_PROCESADORES, category);
+        scrapeProducts(WebScrapingConstants.WEB_AMAZON_PROCESADORES, category);
         System.out.println("Scraping programado para la categoría Procesadores completado.");
     }
 
     @Scheduled(cron = "0 20 3 * * ?") // Ejecutar todos los días a las 3:20 AM
     public void scrapeCategory2() {
         System.out.println("Iniciando scraping programado para la categoría Tarjetas Gráficas...");
-        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_TARJETA_GRAFICA, WebScrapingConstants.CATEGORIA_TARJETA_GRAFICA);
-        scrapeProducts(WebScrapingConstants.WEB_COOLMOD_TARJETA_GRAFICA, WebScrapingConstants.CATEGORIA_TARJETA_GRAFICA);
+        ProductCategory category = productCategoryService.findById(WebScrapingConstants.CATEGORIA_TARJETA_GRAFICA);
+        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_TARJETA_GRAFICA, category);
+        scrapeProducts(WebScrapingConstants.WEB_COOLMOD_TARJETA_GRAFICA, category);
         System.out.println("Scraping programado para la categoría Tarjetas Gráficas completado.");
     }
 
     @Scheduled(cron = "0 30 4 * * ?") // Ejecutar todos los días a las 4:30 AM
     public void scrapeCategory3() {
         System.out.println("Iniciando scraping programado para la categoría Placas Base...");
-        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_PLACA_BASE, WebScrapingConstants.CATEGORIA_PLACA_BASE);
-        scrapeProducts(WebScrapingConstants.WEB_COOLMOD_PLACA_BASE, WebScrapingConstants.CATEGORIA_PLACA_BASE);
+        ProductCategory category = productCategoryService.findById(WebScrapingConstants.CATEGORIA_PLACA_BASE);
+        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_PLACA_BASE, category);
+        scrapeProducts(WebScrapingConstants.WEB_COOLMOD_PLACA_BASE, category);
         System.out.println("Scraping programado para la categoría Placas Base completado.");
     }
 
     @Scheduled(cron = "0 40 5 * * ?") // Ejecutar todos los días a las 5:40 AM
     public void scrapeCategory4() {
         System.out.println("Iniciando scraping programado para la categoría RAM...");
-        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_RAM, WebScrapingConstants.CATEGORIA_RAM);
+        ProductCategory category = productCategoryService.findById(WebScrapingConstants.CATEGORIA_RAM);
+        scrapeProducts(WebScrapingConstants.WEB_PCCOMPONENTES_RAM, category);
         System.out.println("Scraping programado para la categoría RAM completado.");
     }
 }
