@@ -1,5 +1,5 @@
 # Dockerfile para el backend Spring Boot con Selenium y ChromeDriver
-FROM openjdk:17-jdk-slim as builder
+FROM eclipse-temurin:17-jdk as builder
 
 # Instala Maven y dependencias necesarias
 RUN apt-get update && \
@@ -13,7 +13,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Imagen final
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk
 
 # Instala Google Chrome y unzip
 RUN apt-get update && \
