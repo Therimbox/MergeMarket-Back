@@ -135,19 +135,60 @@ public class CategoryHelper {
 	}
 
 	private String normalizePlacaBase(String name) {
-		name = name.replaceAll("(?i)Socket.*", "");
-		name = name.replaceAll("D4", "");
-		name = name.replaceAll("Ddr4", "");
-		name = name.replaceAll("Livemixer", "Live Mixer");
-		name = name.replaceAll("Ligthning", "Lightning");
-		name = name.replaceAll("(?i)Wifi.*", "");
-		name = name.replaceAll("(?i)Ddr4.*", "");
-		name = name.replaceAll("(?i)Csm.*", "");
-		name = name.replaceAll("-$", "");
-		name = name.replaceAll("/$", "");
+		// Eliminar prefijo "Placa Base"
+		name = name.replaceAll("(?i)^Placa\\s+Base\\s+", "");
+		
+		// Correcciones ortográficas comunes
+		name = name.replaceAll("(?i)Livemixer", "Live Mixer");
+		name = name.replaceAll("(?i)Ligthning", "Lightning");
+		
+		// Eliminar especificaciones técnicas de chipset/socket en medio del nombre
+		name = name.replaceAll("(?i)\\s+(Intel|Amd)\\s+(A520|A620|A320|B450|B550|B650|B650e|B650m|B660|B760|B840|B850|B860|X570|X670|X670e|X870|X870e|H410|H510|H610|H770|H810|Z490|Z590|Z690|Z790|Z890|Q570|Q670|Q870|W680|W790|W880|C256|C262|C266|C741|Trx50|Wrx80|Wrx90|X299|Epyc|Rome|Turin|Sienad8ud3)\\b", "");
+		
+		// Eliminar sockets y especificaciones
+		name = name.replaceAll("(?i)\\s+(Lga\\s?\\d+|Am4|Am5|Str5|Sp3|Sp5|Sp6|Swrx8|Socket\\s+\\w+)", "");
+		
+		// Eliminar formatos de placa
+		name = name.replaceAll("(?i)\\s+(Atx|Micro\\s?Atx|Mini\\s?Itx|E-Atx|Eeb|Ceb|Ssi\\s?Ceb|Micro-Atx|Mini-Itx)", "");
+		
+		// Eliminar tipos de RAM
+		name = name.replaceAll("(?i)\\s+(Ddr3|Ddr4|Ddr5|D5)", "");
+		
+		// Eliminar conectividad
+		name = name.replaceAll("(?i)\\s+(Wifi\\s?\\d?|Wi-Fi\\s?\\d?|Ax|Ac|Bluetooth\\s?[\\d.]+)", "");
+		
+		// Eliminar características de almacenamiento
+		name = name.replaceAll("(?i)\\s+(/M\\.2\\+?|M\\.2\\+?|Dual\\s+M\\.2)", "");
+		
+		// Eliminar versiones y revisiones (al final del nombre)
+		name = name.replaceAll("(?i)\\s+(V2|V3|R2\\.0|Ii|Iii|2\\.0|3\\.0|\\(.*?\\))\\s*$", "");
+		
+		// Eliminar características adicionales
+		name = name.replaceAll("(?i)\\s+(Argb|Rgb|Ice|White|Blanca|Black|Se|Btf|Plus)", "");
+		
+		// Eliminar conectores y especificaciones técnicas
+		name = name.replaceAll("(?i)\\s+(\\+|Pcie\\s?[\\d.]+|Usb\\s?[\\d.]+|Gen\\s?\\d+|Thunderbolt\\s?\\d+|Lan|Gbe|\\d+gbe|\\d+\\.?\\d*g\\s?Lan)", "");
+		
+		// Eliminar capacidades de RAM y otras especificaciones numéricas largas
+		name = name.replaceAll("(?i)\\s+(\\d+gb|\\d+tb|\\d+\\s?Dimm|Ecc|Raid|Ipmi|Ast\\d+)", "");
+		
+		// Eliminar sufijos técnicos
+		name = name.replaceAll("(?i)\\s+(Sata\\s?Iii?|Nvme|Soporta|Compatibilidad|Avanzada|Robusta|Server|Gaming|Creatividad|Audio|Uefi|Overclocking)", "");
+		
+		// Eliminar caracteres especiales al final
+		name = name.replaceAll("[-/]+$", "");
+		
+		// Normalizar espacios múltiples
 		name = name.replaceAll("\\s{2,}", " ");
-		String productName = name.toLowerCase();
-
+		
+		// Convertir a lowercase primero para trabajar con el texto
+		String productName = name.toLowerCase().trim();
+		
+		// Eliminar espacios y guiones redundantes
+		productName = productName.replaceAll("\\s*-\\s*", "-");
+		productName = productName.replaceAll("\\s*/\\s*", "/");
+		
+		// Convertir a CamelCase (primera letra de cada palabra en mayúscula)
 		Pattern pattern = Pattern.compile("\\b(\\w)");
 		Matcher matcher = pattern.matcher(productName);
 
