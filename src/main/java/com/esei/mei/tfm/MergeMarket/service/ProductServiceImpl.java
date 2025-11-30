@@ -87,9 +87,16 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public List<Product> findFilteredSortedByCategory(ProductCategory category) {
-		return productDao.findByCategory(category).stream()
-			.filter(p -> p.getPrice() != null && p.getPrice() > 0 && p.getActivo() == 1)
-			.sorted(java.util.Comparator.comparing(Product::getPrice))
-			.collect(java.util.stream.Collectors.toList());
+		if (category.getId() != null && category.getId() == WebScrapingConstants.CATEGORIA_RAM) {
+			return productDao.findByCategory(category).stream()
+				.filter(p -> p.getPrice() != null && p.getPrice() > 0)
+				.sorted(java.util.Comparator.comparing(Product::getPrice))
+				.collect(java.util.stream.Collectors.toList());
+		} else {
+			return productDao.findByCategory(category).stream()
+				.filter(p -> p.getPrice() != null && p.getPrice() > 0 && p.getActivo() == 1)
+				.sorted(java.util.Comparator.comparing(Product::getPrice))
+				.collect(java.util.stream.Collectors.toList());
+		}
 	}
 }
