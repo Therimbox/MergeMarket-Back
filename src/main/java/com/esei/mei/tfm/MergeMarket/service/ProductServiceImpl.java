@@ -84,4 +84,12 @@ public class ProductServiceImpl implements ProductService{
             .map(Product::getCategory)
             .orElseThrow(() -> new IllegalArgumentException("Category not found for the given ID"));
     }
+
+	@Override
+	public List<Product> findFilteredSortedByCategory(ProductCategory category) {
+		return productDao.findByCategory(category).stream()
+			.filter(p -> p.getPrice() != null && p.getPrice() > 0)
+			.sorted(java.util.Comparator.comparing(Product::getPrice))
+			.collect(java.util.stream.Collectors.toList());
+	}
 }

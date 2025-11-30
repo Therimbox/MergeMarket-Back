@@ -40,7 +40,7 @@ public class ProductController {
     
     @GetMapping("/bycategory/{category}")
     public ResponseEntity<List<Product>> findProductsByCategory(@PathVariable ProductCategory category) {
-        List<Product> products = productService.findByCategory(category);
+        List<Product> products = productService.findFilteredSortedByCategory(category);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }

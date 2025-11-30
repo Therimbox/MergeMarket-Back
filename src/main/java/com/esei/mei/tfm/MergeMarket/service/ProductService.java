@@ -28,4 +28,6 @@ public interface ProductService {
 
 	Product findMatchingProduct(String productName, ProductCategory category);
 
+	List<Product> findFilteredSortedByCategory(ProductCategory category);
+
 }
