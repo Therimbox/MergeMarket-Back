@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +28,9 @@ public class Product {
     private String web;
     private String image;
     private Date lastDate;
+
+	@Column(nullable = false, columnDefinition = "int default 1")
+	private int activo = 1;
     
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -41,6 +45,7 @@ public class Product {
 		this.name = name;
 		this.web = web;
 		this.image = image;
+		this.activo = 1;
 	}
 	public Product(ProductCategory category, String name, Double price, String web, String image) {
 		super();
@@ -50,6 +55,7 @@ public class Product {
 		this.web = web;
 		this.image = image;
 		this.lastDate = new Date();
+		this.activo = 1;
 	}
 	public Long getIdProduct() {
 		return idProduct;
@@ -99,6 +105,13 @@ public class Product {
 	public void setPriceHistories(List<PriceHistory> priceHistories) {
         this.priceHistories = priceHistories;
     }
+	public int getActivo() {
+		return activo;
+	}
+
+	public void setActivo(int activo) {
+		this.activo = activo;
+	}
 
     public void updatePrice(Double newPrice) {
         if (this.price != null && !this.price.equals(newPrice)) {

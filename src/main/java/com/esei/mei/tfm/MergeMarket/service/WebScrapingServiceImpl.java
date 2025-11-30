@@ -48,7 +48,21 @@ public class WebScrapingServiceImpl implements WebScrapingService {
 		insertProducts(category);
 		assignProductsToPriceProducts();
 		comparePrices(category);
+		updateActivoForCategory(category);
 		return products;
+	}
+
+	private void updateActivoForCategory(ProductCategory category) {
+		List<Product> products = productService.findByCategory(category);
+		for (Product product : products) {
+			List<PriceProduct> priceProducts = priceProductService.findByProductId(product);
+			if (priceProducts != null && !priceProducts.isEmpty()) {
+				product.setActivo(1);
+			} else {
+				product.setActivo(0);
+			}
+			productService.update(product);
+		}
 	}
 
 	private void savePriceForProduct(Product product, String baseUrl, ProductCategory category) {

@@ -81,6 +81,10 @@ public class CategoryHelper {
 		name = name.replaceFirst("Box", "");
 		name = name.replaceFirst("con*", "");
 		name = name.replaceAll("\\s[^\\s]*Ghz.*", "");
+		name = name.replaceFirst("Processor", "");
+		name = name.replaceFirst("BOX", "");
+		name = name.replaceAll("(?i)(\\d+\\s*N[úu]cleos|N[úu]cleos\\s*\\d+)", "");
+
 		name = name.trim();
 
 		if (name.contains(",")) {
